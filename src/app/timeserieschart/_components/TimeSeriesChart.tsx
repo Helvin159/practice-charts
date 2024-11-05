@@ -5,15 +5,16 @@ import ApexCharts from 'apexcharts';
 import { interestRateData } from '../../_utils/interestRateData';
 
 const TimeSeriesChart = () => {
-  const chartRef = useRef(null);
-  const series = [
-    {
-      name: 'HRM',
-      data: interestRateData
-    }
-  ];
+  const chartRef = useRef<HTMLDivElement>(null);
+  const apexChartRef = useRef<ApexCharts | null>(null);
 
   useEffect(() => {
+    const series = [
+      {
+        name: 'HRM',
+        data: interestRateData
+      }
+    ];
     const options = {
       series,
       chart: {
@@ -53,7 +54,7 @@ const TimeSeriesChart = () => {
       },
       yaxis: {
         labels: {
-          formatter: function (val) {
+          formatter: function (val: number) {
             return (val / 1000000).toFixed(0);
           }
         },
@@ -68,7 +69,7 @@ const TimeSeriesChart = () => {
         shared: false,
         y: {
           forceNiceScale: true,
-          formatter: function (val) {
+          formatter: function (val: number) {
             return (val / 1000000).toFixed(0);
           }
         }
@@ -79,15 +80,21 @@ const TimeSeriesChart = () => {
       }
     };
 
-    const chart = new ApexCharts(chartRef.current, options);
+    apexChartRef.current = new ApexCharts(chartRef.current, options);
+    apexChartRef.current.render();
 
-    chart.render();
+    return () => {
+      if (apexChartRef.current) apexChartRef.current.destroy();
+    };
   }, []);
 
   return (
-    <div>
+    <>
+      <div style={{ width: '100%', margin: '0 auto', textAlign: 'center' }}>
+        <h1>ApexChartsJs Time Series Chart</h1>
+      </div>
       <div ref={chartRef} />
-    </div>
+    </>
   );
 };
 
