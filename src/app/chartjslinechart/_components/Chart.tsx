@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react';
 
 import {
   Chart as ChartJS,
@@ -9,8 +9,13 @@ import {
   PointElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 } from 'chart.js';
+import {
+  chartJsDateData,
+  chartJsDatesData,
+  chartJsRatesData
+} from '@/app/_utils/interestRateData';
 
 ChartJS.register(
   CategoryScale,
@@ -24,86 +29,93 @@ ChartJS.register(
 );
 
 const Chart = () => {
-  const chartRef = useRef(null)
+  const chartRef = useRef(null);
 
-
-  useEffect(() =>{
+  useEffect(() => {
     const ctx = chartRef.current.getContext('2d');
 
     new ChartJS(ctx, {
-    type: 'line',
-    data: {
-      labels: ['May 6', 'Jun 3', 'Jul 1', 'Jul 29', 'Aug 26', 'Sep 23', 'Oct 21'],
-      datasets: [{
-        label: 'VA Mortgage Indices',
-        data: [6.75, 6.55, 6.3, 6.2, 5.95, 5.6, 6.0, ], // Example data points
-        borderColor: '#16405a', // Line color
-        backgroundColor: 'rgba(22, 64, 90, 0.1)', // Line fill color (optional)
-        fill: true,
-        borderWidth: 2,
-        tension: 0,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false // Hide the legend if you only have one dataset
-        },
-        title: {
-          display: true,
-          text: '6 Month VA Mortgage Indices',
-          font: {
-            size: 20,
-            weight: 'bold'
-          },
-          color: '#16405a'
-        }
+      type: 'line',
+      data: {
+        // labels: chartJsDateData,
+        labels: chartJsDatesData,
+        datasets: [
+          {
+            label: 'VA Mortgage Indices',
+            data: chartJsRatesData,
+            borderColor: '#16405a',
+            backgroundColor: 'rgba(22, 64, 90, 0.1)',
+            fill: true,
+            borderWidth: 2.5,
+            tension: 0.05,
+            pointBorderWidth: 0.8,
+            pointBorderColor: '#008000'
+          }
+        ]
       },
-      scales: {
-        x: {
-          grid: {
-            display: true
-          },
-          ticks: {
-            font: {
-              size: 12
-            },
-            maxTicksLimit: 6,
-          },
-        },
-        y: {
-          beginAtZero: false,
-          grid: {
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
             display: false
           },
-          ticks: {
-            callback: function(value) {
-              return value.toFixed(3) + '%'; // Display percentage format
-            },
-
+          title: {
+            display: true,
+            text: '6 Month VA Mortgage Indices',
             font: {
-              size: 12
+              size: 20,
+              weight: 'bold'
             },
-            stepSize: 0.25 // Adjust step size as needed
+            color: '#16405a'
+          }
+        },
+        elements: {
+          line: {
+            tension: 0
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: true
+            },
+            ticks: {
+              font: {
+                size: 12
+              },
+              maxTicksLimit: 6
+            }
+          },
+          y: {
+            beginAtZero: true,
+            min: Math.min(...chartJsRatesData),
+            max: Math.max(...chartJsRatesData),
+            grid: {
+              display: false
+            },
+            ticks: {
+              callback: function (value) {
+                return value.toFixed(3) + '%'; // Display percentage format
+              },
+
+              font: {
+                size: 12
+              },
+              stepSize: 0.01 // Adjust step size as needed
+            }
           }
         }
       }
-    }
     });
-  })
+  });
 
   return (
     <>
-    <div style={{width: '800px', margin: '0 auto'}}>
-      <canvas ref={chartRef} width="400" height="300"></canvas>
-    </div>
-
-    <footer className="text-center">
-      <p>Practice</p>
-    </footer>
+      <div style={{ width: '800px', margin: '0 auto' }}>
+        <canvas ref={chartRef} width='400' height='300'></canvas>
+      </div>
     </>
   );
-}
+};
 
-export default Chart
+export default Chart;

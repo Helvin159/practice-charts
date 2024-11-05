@@ -1,45 +1,36 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
 import ApexCharts from 'apexcharts';
-import dayjs from 'dayjs';
+
+import { interestRateData } from '../../_utils/interestRateData';
 
 const TimeSeriesChart = () => {
   const chartRef = useRef(null);
-
-  const generateData = () => {
-    const data = [];
-
-    let ts = dayjs().subtract(30, 'days').valueOf();
-    for (let i = 0; i < 30; i++) {
-      ts += 86400000; // Increment by one day
-      data.push([ts, Math.floor(Math.random() * 100) + 1]);
+  const series = [
+    {
+      name: 'HRM',
+      data: interestRateData
     }
-    return data;
-  };
-
-  console.log(generateData());
+  ];
 
   useEffect(() => {
     const options = {
-      series: [
-        {
-          name: 'XYZ MOTORS',
-          data: generateData()
-        }
-      ],
+      series,
       chart: {
         type: 'area',
         stacked: false,
         height: 350,
         zoom: {
           type: 'x',
-          enabled: true,
+          enabled: false,
           autoScaleYaxis: true
         },
         toolbar: {
           autoSelected: 'zoom'
         }
       },
+      // Line Color
+      colors: ['#000'],
       dataLabels: {
         enabled: false
       },
@@ -47,7 +38,7 @@ const TimeSeriesChart = () => {
         size: 0
       },
       title: {
-        text: 'Stock Price Movement',
+        text: 'Interest Rate Movement',
         align: 'left'
       },
       fill: {
@@ -62,7 +53,7 @@ const TimeSeriesChart = () => {
       },
       yaxis: {
         labels: {
-          formatter: function (val: number) {
+          formatter: function (val) {
             return (val / 1000000).toFixed(0);
           }
         },
@@ -76,18 +67,28 @@ const TimeSeriesChart = () => {
       tooltip: {
         shared: false,
         y: {
-          formatter: function (val: number) {
+          forceNiceScale: true,
+          formatter: function (val) {
             return (val / 1000000).toFixed(0);
           }
         }
+      },
+      stroke: {
+        width: 2,
+        curve: 'straight'
       }
     };
-    const chart = new ApexCharts(document.querySelector('#chart'), options);
+
+    const chart = new ApexCharts(chartRef.current, options);
 
     chart.render();
   }, []);
 
-  return <div id='chart' ref={chartRef}></div>;
+  return (
+    <div>
+      <div ref={chartRef} />
+    </div>
+  );
 };
 
 export default TimeSeriesChart;
