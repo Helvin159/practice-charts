@@ -2,6 +2,7 @@
   "name": "chart-practice",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://helvin159.github.io/practice-charts",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
