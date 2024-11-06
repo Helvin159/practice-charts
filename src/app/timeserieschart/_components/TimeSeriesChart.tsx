@@ -1,18 +1,26 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ApexCharts from 'apexcharts';
 
 import { interestRateData } from '../../_utils/interestRateData';
 
+import './TimeSeriesChart.css';
+
 const TimeSeriesChart = () => {
   const chartRef = useRef<HTMLDivElement>(null);
   const apexChartRef = useRef<ApexCharts | null>(null);
+  const [seriesData, setSeriesData] = useState<{ x: number; y: number }[]>(
+    interestRateData.map((i) => ({
+      x: new Date(i.x).getTime(),
+      y: i.y
+    }))
+  );
 
   useEffect(() => {
     const series = [
       {
         name: 'HRM',
-        data: interestRateData
+        data: seriesData
       }
     ];
     const options = {
@@ -55,11 +63,11 @@ const TimeSeriesChart = () => {
       yaxis: {
         labels: {
           formatter: function (val: number) {
-            return (val / 1000000).toFixed(0);
+            return val.toFixed(3) + '%';
           }
         },
         title: {
-          text: 'Price'
+          text: 'Rate'
         }
       },
       xaxis: {
@@ -70,7 +78,7 @@ const TimeSeriesChart = () => {
         y: {
           forceNiceScale: true,
           formatter: function (val: number) {
-            return (val / 1000000).toFixed(0);
+            return val.toFixed(3);
           }
         }
       },
@@ -86,14 +94,39 @@ const TimeSeriesChart = () => {
     return () => {
       if (apexChartRef.current) apexChartRef.current.destroy();
     };
-  }, []);
+  }, [seriesData]);
+
+  const updateChart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const val = Number((e.target as HTMLButtonElement).value);
+    const arr = interestRateData.map((i) => ({
+      x: new Date(i.x).getTime(),
+      y: i.y
+    }));
+
+    if (val === 3) {
+      setSeriesData(arr.slice(0, arr.length / 2));
+    } else if (val === 2) {
+      setSeriesData(arr.slice(0, arr.length / 3));
+    } else if (val === 6) {
+      setSeriesData(arr);
+    }
+  };
 
   return (
     <>
-      <div style={{ width: '100%', margin: '0 auto', textAlign: 'center' }}>
+      <div className='container'>
         <h1>ApexChartsJs Time Series Chart</h1>
       </div>
       <div ref={chartRef} />
+      <button value={2} onClick={updateChart}>
+        2 months
+      </button>
+      <button value={3} onClick={updateChart}>
+        3 months
+      </button>
+      <button value={6} onClick={updateChart}>
+        6 months
+      </button>
     </>
   );
 };

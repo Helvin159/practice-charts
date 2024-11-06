@@ -14,8 +14,6 @@ import {
   ChartItem
 } from 'chart.js';
 import {
-  chartJsDateData3Months,
-  chartJsRatesData3Months,
   chartJsDatesData,
   chartJsRatesData
 } from '@/app/_utils/interestRateData';
@@ -58,11 +56,14 @@ const ChartJsLineChart = () => {
     const val = Number((e.target as HTMLButtonElement).value);
 
     if (val == 3) {
-      setRates(chartJsRatesData3Months);
-      setDates(chartJsDateData3Months);
+      setRates(chartJsRatesData.slice(0, chartJsRatesData.length / 2));
+      setDates(chartJsDatesData.slice(0, chartJsDatesData.length / 2));
     } else if (val == 6) {
       setRates(chartJsRatesData);
       setDates(chartJsDatesData);
+    } else if (val === 2) {
+      setRates(chartJsRatesData.slice(0, chartJsRatesData.length / 3));
+      setDates(chartJsDatesData.slice(0, chartJsDatesData.length / 3));
     } else {
       console.error('Error');
     }
@@ -169,6 +170,9 @@ const ChartJsLineChart = () => {
       <div className='chart-wrapper'>
         <canvas ref={chartRef} width='400' height='300'></canvas>
         <div>
+          <button value={2} onClick={handleClick}>
+            2 months
+          </button>
           <button value={3} onClick={handleClick}>
             3 months
           </button>
