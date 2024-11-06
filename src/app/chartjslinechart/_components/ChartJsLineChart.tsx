@@ -127,7 +127,7 @@ const ChartJsLineChart = () => {
             scales: {
               x: {
                 grid: {
-                  display: true
+                  display: false
                 },
                 ticks: {
                   font: {
@@ -141,7 +141,7 @@ const ChartJsLineChart = () => {
                 min: Math.min(...rates),
                 max: Math.max(...rates),
                 grid: {
-                  display: false
+                  display: true
                 },
                 ticks: {
                   callback: function (value) {
@@ -151,7 +151,7 @@ const ChartJsLineChart = () => {
                   font: {
                     size: 12
                   },
-                  stepSize: 0.01 // Adjust step size as needed
+                  stepSize: 0.025 // Adjust step size as needed
                 }
               }
             }

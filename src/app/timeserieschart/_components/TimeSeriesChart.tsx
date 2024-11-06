@@ -68,10 +68,16 @@ const TimeSeriesChart = () => {
         },
         title: {
           text: 'Rate'
+        },
+        lines: {
+          show: false
         }
       },
       xaxis: {
-        type: 'datetime'
+        type: 'datetime',
+        lines: {
+          show: true
+        }
       },
       tooltip: {
         shared: false,
