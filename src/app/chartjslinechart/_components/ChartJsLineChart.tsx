@@ -106,7 +106,7 @@ const ChartJsLineChart = () => {
               },
               title: {
                 display: true,
-                text: '6 Month VA Mortgage Rates',
+                text: '6 Month VA Mortgage Indices',
                 font: {
                   size: 20,
                   weight: 'bold'

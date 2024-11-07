@@ -47,8 +47,8 @@ const TimeSeriesChart = () => {
         size: 0
       },
       title: {
-        text: 'Interest Rate Movement',
-        align: 'left'
+        text: '6 Month VA Mortgage Indices',
+        align: 'center'
       },
       fill: {
         type: 'gradient',
